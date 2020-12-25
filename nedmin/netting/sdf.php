@@ -1,26 +1,29 @@
-// KATEGORİ DÜZENLEME
-if (isset($_POST['urunduzenle'])) {
+// MENÜ EKLEME
+if (isset($_POST['yorumkaydet'])) {
 
-    $urun_id = $_POST['urun_id'];
-    $urun_seourl = seo($_POST['urun_ad']);
+    $yorum_seourl = seo($_POST['yorum_ad']);
 
-    $urunkaydet = $db->prepare("UPDATE urun SET 
-    urun_ad =:urun_ad,
-    urun_sira=:urun_sira,
-    urun_seourl=:urun_seourl,
-    urun_durum=:urun_durum
-    WHERE urun_id={$_POST['urun_id']}");
+    $yorumkaydet = $db->prepare("INSERT into yorum SET 
+    yorum_ad =:yorum_ad,
+    yorum_detay=:yorum_detay,
+    yorum_url=:yorum_url,
+    yorum_sira=:yorum_sira,
+    yorum_seourl=:yorum_seourl,
+    yorum_durum=:yorum_durum
+    ");
 
-    $update = $urunkaydet->execute(array(
-        'urun_ad' => $_POST['urun_ad'],
-        'urun_sira' => $_POST['urun_sira'],
-        'urun_seourl' => $urun_seourl,
-        'urun_durum' => $_POST['urun_durum']
+    $insert = $yorumkaydet->execute(array(
+        'yorum_ad' => $_POST['yorum_ad'],
+        'yorum_detay' => $_POST['yorum_detay'],
+        'yorum_url' => $_POST['yorum_url'],
+        'yorum_sira' => $_POST['yorum_sira'],
+        'yorum_seourl' => $yorum_seourl,
+        'yorum_durum' => $_POST['yorum_durum']
     ));
 
-    if ($update) {
-        header("location:../production/urun-duzenle.php?urun_id=$urun_id&durum=ok");
+    if ($insert) {
+        header("location:../production/yorum.php?durum=ok");
     } else {
-        header("location:../production/urun-duzenle.php?urun_id=$urun_id&durum=no");
+        header("location:../production/yorum.php?durum=no");
     }
 }

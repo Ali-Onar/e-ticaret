@@ -695,6 +695,7 @@ if (isset($_POST['urunduzenle'])) {
 		urun_detay=:urun_detay,
 		urun_fiyat=:urun_fiyat,
 		urun_video=:urun_video,
+        urun_onecikar=:urun_onecikar,
 		urun_keyword=:urun_keyword,
 		urun_durum=:urun_durum,
 		urun_stok=:urun_stok,	
@@ -706,7 +707,8 @@ if (isset($_POST['urunduzenle'])) {
 		'urun_ad' => $_POST['urun_ad'],
 		'urun_detay' => $_POST['urun_detay'],
 		'urun_fiyat' => $_POST['urun_fiyat'],
-		'urun_video' => $_POST['urun_video'],
+        'urun_video' => $_POST['urun_video'],
+        'urun_onecikar' => $_POST['urun_onecikar'],
 		'urun_keyword' => $_POST['urun_keyword'],
 		'urun_durum' => $_POST['urun_durum'],
 		'urun_stok' => $_POST['urun_stok'],
@@ -722,4 +724,27 @@ if (isset($_POST['urunduzenle'])) {
 		Header("Location:../production/urun-duzenle.php?durum=no&urun_id=$urun_id");
 	}
 
+}
+
+
+// YORUM EKLEME
+if (isset($_POST['yorumkaydet'])) {
+
+    $gelen_url = $_POST['gelen_url'];
+
+    $yorumkaydet = $db->prepare("INSERT INTO yorumlar SET 
+    kullanici_id =:kullanici_id,
+    yorum_detay=:yorum_detay
+    ");
+
+    $insert = $yorumkaydet->execute(array(
+        'kullanici_id' => $_POST['kullanici_id'],
+        'yorum_detay' => $_POST['yorum_detay']
+    ));
+
+    if ($insert) {
+        header("location:$gelen_url?durum=ok");
+    } else {
+        header("location:$gelen_url?durum=no");
+    }
 }

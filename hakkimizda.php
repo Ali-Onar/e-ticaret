@@ -15,7 +15,7 @@ $hakkimizdacek = $hakkimizdasor->fetch(PDO::FETCH_ASSOC);
 					<div class="page-title-inner">
 					<div class="row">
 						<div class="col-md-4">
-							<div class="bigtitle">Hakkımızda</div>
+							<div class="bigtitle">Hakkımızda Bilgi</div>
 						</div>
 					</div>
 					</div>
