@@ -116,14 +116,25 @@ if ($_GET['durum'] == "ok") { ?>
 			<div class="tab-review">
 				<ul id="myTab" class="nav nav-tabs shop-tab">
 					<li class="<?php
-						if ($_GET['durum'] != "ok") { ?> 
+								if ($_GET['durum'] != "ok") { ?> 
 						active 
 						<?php }	?>"><a href="#desc" data-toggle="tab">Açıklama</a></li>
 
 					<li class=" <?php
-						if ($_GET['durum'] == "ok") { ?> 
-						active <?php }	
-						?>"><a href="#rev" data-toggle="tab">Yorumlar (0)</a></li>
+								if ($_GET['durum'] == "ok") { ?> 
+						active <?php }
+
+								// Yorum İşlemleri
+								$kullanici_id = $kullanicicek['kullanici_id'];
+								$urun_id = $uruncek['urun_id'];
+
+								$yorumsor = $db->prepare("SELECT * FROM yorumlar where urun_id=:urun_id order by yorum_zaman desc");
+								$yorumsor->execute(array(
+									'urun_id' => $urun_id
+								));
+
+
+								?>"><a href="#rev" data-toggle="tab">Yorumlar (<?php echo $yorumsor->rowCount(); ?>)</a></li>
 					<li class=""><a href="#video" data-toggle="tab">Ürün Video</a></li>
 				</ul>
 				<div id="myTabContent" class="tab-content shop-tab-ct">
@@ -142,15 +153,31 @@ if ($_GET['durum'] == "ok") { ?>
 						active in
 					<?php }	?>" id="rev">
 
+						<?php
 
-						<!-- Yorumları Dökeceğiz -->
-						<p class="dash">
-							<span>Jhon Doe</span> (11/25/2012)<br><br>
-							Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse.
-						</p>
 
-						<!-- Yorumları Dökeceğiz -->
 
+						while ($yorumcek = $yorumsor->fetch(PDO::FETCH_ASSOC)) {
+
+							$ykullanici_id = $yorumcek['kullanici_id'];
+
+							$ykullanicisor = $db->prepare("SELECT * FROM kullanici where kullanici_id=:id");
+							$ykullanicisor->execute(array(
+								'id' => $ykullanici_id
+							));
+							$ykullanicicek = $ykullanicisor->fetch(PDO::FETCH_ASSOC);
+
+						?>
+
+							<!-- Yorumları Dökeceğiz -->
+							<p class="dash">
+								<span><?php echo $ykullanicicek['kullanici_adsoyad']; ?></span> (
+								<?php echo $yorumcek['yorum_zaman']; ?>)<br><br>
+								<?php echo $yorumcek['yorum_detay']; ?>
+							</p>
+
+							<!-- Yorumları Dökeceğiz -->
+						<?php } ?>
 
 						<h4>Yorum Yazın</h4>
 
@@ -163,6 +190,8 @@ if ($_GET['durum'] == "ok") { ?>
 								</div>
 								<input type="hidden" name="gelen_url" value="<?php echo "http://" . $_SERVER['HTTP_HOST'] . "" . $_SERVER['REQUEST_URI'] . ""; ?>">
 								<input type="hidden" name="kullanici_id" value="<?php echo $kullanicicek['kullanici_id'] ?>">
+								<input type="hidden" name="urun_id" value="<?php echo $uruncek['urun_id'] ?>">
+
 
 								<button type="submit" name="yorumkaydet" class="btn btn-default btn-red btn-sm">Yorumu Gönder</button>
 							</form>

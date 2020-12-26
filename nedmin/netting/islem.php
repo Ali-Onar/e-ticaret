@@ -734,11 +734,13 @@ if (isset($_POST['yorumkaydet'])) {
 
     $yorumkaydet = $db->prepare("INSERT INTO yorumlar SET 
     kullanici_id =:kullanici_id,
+    urun_id =:urun_id,
     yorum_detay=:yorum_detay
     ");
 
     $insert = $yorumkaydet->execute(array(
         'kullanici_id' => $_POST['kullanici_id'],
+        'urun_id' => $_POST['urun_id'],
         'yorum_detay' => $_POST['yorum_detay']
     ));
 
