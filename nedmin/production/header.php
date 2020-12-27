@@ -102,6 +102,7 @@ if($say == 0) {
                     </ul>
                   </li>
                   <li><a href="kullanici.php"><i class="fa fa-user"></i> Kullanıcılar </a></li>
+                  <li><a href="yorum.php"><i class="fa fa-user"></i> Yorumlar </a></li>
                   <li><a href="urun.php"><i class="fa fa-line-chart"></i> Ürünler </a></li>
                   <li><a href="menu.php"><i class="fa fa-bars"></i> Menüler </a></li>
                   <li><a href="kategori.php"><i class="fa fa-crop"></i> Kategoriler </a></li>

@@ -269,31 +269,29 @@ if (isset($_POST['admingiris'])) {
 
 if (isset($_POST['kullanicigiris'])) {
 
-	echo $kullanici_mail=htmlspecialchars($_POST['kullanici_mail']); 
-	echo $kullanici_password=md5($_POST['kullanici_password']); 
+    echo $kullanici_mail = htmlspecialchars($_POST['kullanici_mail']);
+    echo $kullanici_password = md5($_POST['kullanici_password']);
 
-	$kullanicisor=$db->prepare("SELECT * from kullanici where kullanici_mail=:mail and kullanici_yetki=:yetki and kullanici_password=:password and kullanici_durum=:durum");
-	$kullanicisor->execute(array(
-		'mail' => $kullanici_mail,
-		'yetki' => 1,
-		'password' => $kullanici_password,
-		'durum' => 1
-		));
+    $kullanicisor = $db->prepare("SELECT * from kullanici where kullanici_mail=:mail and kullanici_yetki=:yetki and kullanici_password=:password and kullanici_durum=:durum");
+    $kullanicisor->execute(array(
+        'mail' => $kullanici_mail,
+        'yetki' => 1,
+        'password' => $kullanici_password,
+        'durum' => 1
+    ));
 
-	$say=$kullanicisor->rowCount();
+    $say = $kullanicisor->rowCount();
 
-	if ($say==1) {
+    if ($say == 1) {
 
-		echo $_SESSION['userkullanici_mail']=$kullanici_mail;
+        echo $_SESSION['userkullanici_mail'] = $kullanici_mail;
 
-		header("Location:../../");
-		exit;
+        header("Location:../../");
+        exit;
+    } else {
 
-	} else {
-
-		header("Location:../../?durum=basarisizgiris");
-	}
-
+        header("Location:../../?durum=basarisizgiris");
+    }
 }
 
 // GENEL AYARLAR GÜNCELLEME
@@ -645,11 +643,12 @@ if ($_GET['urunsil'] == "ok") {
     }
 }
 
+//Ürün EKLEME
 if (isset($_POST['urunekle'])) {
 
-	$urun_seourl=seo($_POST['urun_ad']);
+    $urun_seourl = seo($_POST['urun_ad']);
 
-	$kaydet=$db->prepare("INSERT INTO urun SET
+    $kaydet = $db->prepare("INSERT INTO urun SET
 		kategori_id=:kategori_id,
 		urun_ad=:urun_ad,
 		urun_detay=:urun_detay,
@@ -660,36 +659,35 @@ if (isset($_POST['urunekle'])) {
 		urun_stok=:urun_stok,	
 		urun_seourl=:seourl		
 		");
-	$insert=$kaydet->execute(array(
-		'kategori_id' => $_POST['kategori_id'],
-		'urun_ad' => $_POST['urun_ad'],
-		'urun_detay' => $_POST['urun_detay'],
-		'urun_fiyat' => $_POST['urun_fiyat'],
-		'urun_video' => $_POST['urun_video'],
-		'urun_keyword' => $_POST['urun_keyword'],
-		'urun_durum' => $_POST['urun_durum'],
-		'urun_stok' => $_POST['urun_stok'],
-		'seourl' => $urun_seourl
+    $insert = $kaydet->execute(array(
+        'kategori_id' => $_POST['kategori_id'],
+        'urun_ad' => $_POST['urun_ad'],
+        'urun_detay' => $_POST['urun_detay'],
+        'urun_fiyat' => $_POST['urun_fiyat'],
+        'urun_video' => $_POST['urun_video'],
+        'urun_keyword' => $_POST['urun_keyword'],
+        'urun_durum' => $_POST['urun_durum'],
+        'urun_stok' => $_POST['urun_stok'],
+        'seourl' => $urun_seourl
 
-		));
+    ));
 
-	if ($insert) {
+    if ($insert) {
 
-		Header("Location:../production/urun.php?durum=ok");
+        Header("Location:../production/urun.php?durum=ok");
+    } else {
 
-	} else {
-
-		Header("Location:../production/urun.php?durum=no");
-	}
-
+        Header("Location:../production/urun.php?durum=no");
+    }
 }
 
+//ÜRÜN DÜZENLE
 if (isset($_POST['urunduzenle'])) {
 
-	$urun_id=$_POST['urun_id'];
-	$urun_seourl=seo($_POST['urun_ad']);
+    $urun_id = $_POST['urun_id'];
+    $urun_seourl = seo($_POST['urun_ad']);
 
-	$kaydet=$db->prepare("UPDATE urun SET
+    $kaydet = $db->prepare("UPDATE urun SET
 		kategori_id=:kategori_id,
 		urun_ad=:urun_ad,
 		urun_detay=:urun_detay,
@@ -701,29 +699,27 @@ if (isset($_POST['urunduzenle'])) {
 		urun_stok=:urun_stok,	
 		urun_seourl=:seourl		
         WHERE urun_id={$_POST['urun_id']}");
-        
-	$update=$kaydet->execute(array(
-		'kategori_id' => $_POST['kategori_id'],
-		'urun_ad' => $_POST['urun_ad'],
-		'urun_detay' => $_POST['urun_detay'],
-		'urun_fiyat' => $_POST['urun_fiyat'],
+
+    $update = $kaydet->execute(array(
+        'kategori_id' => $_POST['kategori_id'],
+        'urun_ad' => $_POST['urun_ad'],
+        'urun_detay' => $_POST['urun_detay'],
+        'urun_fiyat' => $_POST['urun_fiyat'],
         'urun_video' => $_POST['urun_video'],
         'urun_onecikar' => $_POST['urun_onecikar'],
-		'urun_keyword' => $_POST['urun_keyword'],
-		'urun_durum' => $_POST['urun_durum'],
-		'urun_stok' => $_POST['urun_stok'],
-		'seourl' => $urun_seourl
-		));
+        'urun_keyword' => $_POST['urun_keyword'],
+        'urun_durum' => $_POST['urun_durum'],
+        'urun_stok' => $_POST['urun_stok'],
+        'seourl' => $urun_seourl
+    ));
 
-	if ($update) {
+    if ($update) {
 
-		Header("Location:../production/urun-duzenle.php?durum=ok&urun_id=$urun_id");
+        Header("Location:../production/urun-duzenle.php?durum=ok&urun_id=$urun_id");
+    } else {
 
-	} else {
-
-		Header("Location:../production/urun-duzenle.php?durum=no&urun_id=$urun_id");
-	}
-
+        Header("Location:../production/urun-duzenle.php?durum=no&urun_id=$urun_id");
+    }
 }
 
 
@@ -748,5 +744,42 @@ if (isset($_POST['yorumkaydet'])) {
         header("location:$gelen_url?durum=ok");
     } else {
         header("location:$gelen_url?durum=no");
+    }
+}
+
+//YORUM DÜZENLE
+if (isset($_POST['yorumduzenle'])) {
+
+    $yorum_id = $_POST['yorum_id'];
+
+    $kaydet = $db->prepare("UPDATE yorumlar SET
+		yorum_detay=:yorum_detay,
+		yorum_zaman=:yorum_zaman		
+        WHERE yorum_id={$_POST['yorum_id']}");
+
+    $update = $kaydet->execute(array(
+        'yorum_detay' => $_POST['yorum_detay'],
+        'yorum_zaman' => $_POST['yorum_zaman']
+    ));
+
+    if ($update) {
+
+        Header("Location:../production/yorum-duzenle.php?durum=ok&yorum_id=$yorum_id");
+    } else {
+
+        Header("Location:../production/yorum-duzenle.php?durum=no&yorum_id=$yorum_id");
+    }
+}
+
+//YORUM SİLME
+if ($_GET['yorumsil'] == "ok") {
+    $sil = $db->prepare("DELETE FROM yorumlar where yorum_id=:id");
+    $kontrol = $sil->execute(array(
+        'id' => $_GET['yorum_id']
+    ));
+    if ($kontrol) {
+        header("location:../production/yorum.php?sil=ok");
+    } else {
+        header("location:../production/yorum.php?sil=no");
     }
 }
