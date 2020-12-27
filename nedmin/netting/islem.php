@@ -783,3 +783,26 @@ if ($_GET['yorumsil'] == "ok") {
         header("location:../production/yorum.php?sil=no");
     }
 }
+
+// SEPETE ÜRÜN EKLEME
+if (isset($_POST['sepeteekle'])) {
+
+
+    $sepetkaydet = $db->prepare("INSERT INTO sepet SET 
+    kullanici_id =:kullanici_id,
+    urun_id =:urun_id,
+    urun_adet=:urun_adet
+    ");
+
+    $insert = $sepetkaydet->execute(array(
+        'kullanici_id' => $_POST['kullanici_id'],
+        'urun_id' => $_POST['urun_id'],
+        'urun_adet' => $_POST['urun_adet']
+    ));
+
+    if ($insert) {
+        header("location:../../sepet?durum=ok");
+    } else {
+        header("location:../../sepet?durum=no");
+    }
+}
