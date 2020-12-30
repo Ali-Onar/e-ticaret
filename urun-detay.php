@@ -132,9 +132,10 @@ if ($_GET['durum'] == "ok") { ?>
 								$kullanici_id = $kullanicicek['kullanici_id'];
 								$urun_id = $uruncek['urun_id'];
 
-								$yorumsor = $db->prepare("SELECT * FROM yorumlar where urun_id=:urun_id order by yorum_zaman desc");
+								$yorumsor = $db->prepare("SELECT * FROM yorumlar where urun_id=:urun_id and yorum_onay=:yorum_onay");
 								$yorumsor->execute(array(
-									'urun_id' => $urun_id
+									'urun_id' => $urun_id,
+									'yorum_onay' => 1
 								));
 
 

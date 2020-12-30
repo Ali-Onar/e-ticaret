@@ -807,7 +807,7 @@ if (isset($_POST['sepeteekle'])) {
     }
 }
 
-// ÜRÜN ÖNE ÇIK
+// ÜRÜN ÖNE ÇIKAR
 if ($_GET['urun_onecikar']=="ok") {
 
     $duzenle = $db->prepare("UPDATE urun SET
@@ -823,5 +823,43 @@ if ($_GET['urun_onecikar']=="ok") {
         Header("Location:../production/urun.php?durum=ok");
     } else {
         Header("Location:../production/urun.php?durum=no");
+    }
+}
+
+// YORUM ÖNE ÇIKAR
+if ($_GET['yorum_onay']=="ok") {
+
+    $duzenle = $db->prepare("UPDATE yorumlar SET
+    
+    yorum_onay=:yorum_onay
+
+    WHERE yorum_id={$_GET['yorum_id']}"
+    );
+
+    $update = $duzenle->execute(array(
+        'yorum_onay' => $_GET['yorum_one']
+    ));
+
+    if ($update) {
+        Header("Location:../production/yorum.php?durum=ok");
+    } else {
+        Header("Location:../production/yorum.php?durum=no");
+    }
+}
+
+//YORUM SİLME
+if ($_GET['yorumsil'] == "ok") {
+
+    $sil = $db->prepare("DELETE from yorumlar where yorum_id=:yorum_id");
+    $kontrol = $sil->execute(array(
+        'yorum_id' => $_GET['yorum_id']
+    ));
+
+    if ($kontrol) {
+
+        Header("Location:../production/yorum.php?durum=ok");
+    } else {
+
+        Header("Location:../production/yorum.php?durum=no");
     }
 }
