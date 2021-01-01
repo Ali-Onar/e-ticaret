@@ -46,6 +46,7 @@ $urunsor->execute();
                   <th>Ürün Ad</th>
                   <th>Ürün Stok</th>
                   <th>Ürün Fiyat</th>
+                  <th>Resim İşlemleri</th>
                   <th>Ürün Öne Çıkar</th>
                   <th>Ürün Durum</th>
 
@@ -66,6 +67,7 @@ $urunsor->execute();
                     <td><?php echo $uruncek['urun_ad'] ?></td>
                     <td><?php echo $uruncek['urun_stok'] ?></td>
                     <td><?php echo $uruncek['urun_fiyat'] ?></td>
+                    <td><a href="urun-galeri.php?urun_id=<?php echo $uruncek['urun_id'] ?>"><button type="" class="btn btn-success btn-xs">Resim İşlemleri</button></a></td>
                     <td align="center">
                       <?php
                       if ($uruncek['urun_onecikar'] == 0) { ?>

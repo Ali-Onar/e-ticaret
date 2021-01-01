@@ -474,6 +474,35 @@ if (isset($_POST['kullaniciduzenle'])) {
     }
 }
 
+# HESABIM BİLGİLERİ DÜZENLEME
+if (isset($_POST['kullanicibilgiguncelle'])) {
+
+	$kullanici_id=$_POST['kullanici_id'];
+
+	$ayarkaydet=$db->prepare("UPDATE kullanici SET
+		kullanici_adsoyad=:kullanici_adsoyad,
+		kullanici_il=:kullanici_il,
+		kullanici_ilce=:kullanici_ilce
+		WHERE kullanici_id={$_POST['kullanici_id']}");
+
+	$update=$ayarkaydet->execute(array(
+		'kullanici_adsoyad' => $_POST['kullanici_adsoyad'],
+		'kullanici_il' => $_POST['kullanici_il'],
+		'kullanici_ilce' => $_POST['kullanici_ilce']
+		));
+
+
+	if ($update) {
+
+		Header("Location:../../hesabim?durum=ok");
+
+	} else {
+
+		Header("Location:../../hesabim?durum=no");
+	}
+
+}
+
 //KULLANICI SİLME
 if ($_GET['kullanicisil'] == "ok") {
     $sil = $db->prepare("DELETE FROM kullanici where kullanici_id=:id");
@@ -863,3 +892,123 @@ if ($_GET['yorumsil'] == "ok") {
         Header("Location:../production/yorum.php?durum=no");
     }
 }
+
+
+if (isset($_POST['kullanicisifreguncelle'])) {
+
+	echo $kullanici_eskipassword=trim($_POST['kullanici_eskipassword']); echo "<br>";
+	echo $kullanici_passwordone=trim($_POST['kullanici_passwordone']); echo "<br>";
+	echo $kullanici_passwordtwo=trim($_POST['kullanici_passwordtwo']); echo "<br>";
+
+	$kullanici_password=md5($kullanici_eskipassword);
+
+
+	$kullanicisor=$db->prepare("select * from kullanici where kullanici_password=:password");
+	$kullanicisor->execute(array(
+		'password' => $kullanici_password
+		));
+
+			//dönen satır sayısını belirtir
+	$say=$kullanicisor->rowCount();
+
+	if ($say==0) {
+
+		header("Location:../../sifre-guncelle?durum=eskisifrehata");
+
+	} else {
+
+	//eski şifre doğruysa başla
+
+		if ($kullanici_passwordone==$kullanici_passwordtwo) {
+
+
+			if (strlen($kullanici_passwordone)>=6) {
+
+
+				//md5 fonksiyonu şifreyi md5 şifreli hale getirir.
+				$password=md5($kullanici_passwordone);
+
+				$kullanici_yetki=1;
+
+				$kullanicikaydet=$db->prepare("UPDATE kullanici SET
+					kullanici_password=:kullanici_password
+					WHERE kullanici_id={$_POST['kullanici_id']}");
+
+				
+				$insert=$kullanicikaydet->execute(array(
+					'kullanici_password' => $password
+					));
+
+				if ($insert) {
+
+
+					header("Location:../../sifre-guncelle.php?durum=sifredegisti");
+
+
+				//Header("Location:../production/genel-ayarlar.php?durum=ok");
+
+				} else {
+
+
+					header("Location:../../sifre-guncelle.php?durum=no");
+				}
+
+		// Bitiş
+
+			} else {
+
+
+				header("Location:../../sifre-guncelle.php?durum=eksiksifre");
+			}
+
+		} else {
+
+			header("Location:../../sifre-guncelle?durum=sifreleruyusmuyor");
+
+			exit;
+
+		}
+
+	}
+
+	exit;
+
+	if ($update) {
+
+		header("Location:../../sifre-guncelle?durum=ok");
+
+	} else {
+
+		header("Location:../../sifre-guncelle?durum=no");
+	}
+
+}
+
+
+if(isset($_POST['urunfotosil'])) {
+
+	$urun_id=$_POST['urun_id'];
+
+
+	echo $checklist = $_POST['urunfotosec'];
+
+	
+	foreach($checklist as $list) {
+
+		$sil=$db->prepare("DELETE from urunfoto where urunfoto_id=:urunfoto_id");
+		$kontrol=$sil->execute(array(
+			'urunfoto_id' => $list
+			));
+	}
+
+	if ($kontrol) {
+
+		Header("Location:../production/urun-galeri.php?urun_id=$urun_id&durum=ok");
+
+	} else {
+
+		Header("Location:../production/urun-galeri.php?urun_id=$urun_id&durum=no");
+	}
+
+
+} 

@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+﻿<?php include 'header.php'; ?>
 
 <div class="container">
 	<div class="row">
@@ -7,7 +7,7 @@
 				<div class="page-title-inner">
 					<div class="row">
 						<div class="col-md-12">
-							<div class="bigtitle">Hesap Bilgilerim</div>
+							<div class="bigtitle">Şifre Güncelle</div>
 							<p >Bilgilerinizi aşağıdan düzenleyebilirsiniz...</p>
 						</div>
 						
@@ -21,33 +21,33 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="title-bg">
-					<div class="title">Kayıt Bilgileri</div>
+					<div class="title">Şifre Güncelle</div>
 				</div>
 
 				<?php 
 
-				if (@$_GET['durum']=="farklisifre") {?>
+				if ($_GET['durum']=="farklisifre") {?>
 
 				<div class="alert alert-danger">
 					<strong>Hata!</strong> Girdiğiniz şifreler eşleşmiyor.
 				</div>
 
-				<?php } elseif (@$_GET['durum']=="eksiksifre") {?>
+				<?php } elseif ($_GET['durum']=="eksiksifre") {?>
 
 				<div class="alert alert-danger">
 					<strong>Hata!</strong> Şifreniz minimum 6 karakter uzunluğunda olmalıdır.
 				</div>
 
-				<?php } elseif (@$_GET['durum']=="mukerrerkayit") {?>
+				<?php } elseif ($_GET['durum']=="mukerrerkayit") {?>
 
 				<div class="alert alert-danger">
 					<strong>Hata!</strong> Bu kullanıcı daha önce kayıt edilmiş.
 				</div>
 
-				<?php } elseif (@$_GET['durum']=="basarisiz") {?>
+				<?php } elseif ($_GET['durum']=="sifredegisti") {?>
 
-				<div class="alert alert-danger">
-					<strong>Hata!</strong> Kayıt Yapılamadı Sistem Yöneticisine Danışınız.
+				<div class="alert alert-success">
+					<strong>Başarılı!</strong> Şifreniz başarıyla değişti
 				</div>
 
 				<?php }
@@ -60,7 +60,7 @@
 				<div class="form-group dob">
 					<div class="col-sm-12">
 						
-						<input type="text" class="form-control"  required="" name="kullanici_adsoyad" value="<?php echo $kullanicicek['kullanici_adsoyad'] ?>">
+						<input type="password" class="form-control"  required="" name="kullanici_eskipassword" placeholder="Eski Şifrenizi Giriniz">
 					</div>
 					
 				</div>
@@ -68,10 +68,10 @@
 				
 				<div class="form-group dob">
 					<div class="col-sm-6">
-						<input type="text" class="form-control" name="kullanici_il"    value="<?php echo $kullanicicek['kullanici_il'] ?>">
+						<input type="password" class="form-control" name="kullanici_passwordone"    placeholder="Yeni Şifrenizi Giriniz">
 					</div>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" name="kullanici_ilce"   value="<?php echo $kullanicicek['kullanici_ilce'] ?>">
+						<input type="password" class="form-control" name="kullanici_passwordtwo"   placeholder="Yeni Şifrenizi Tekrar Giriniz">
 					</div>
 				</div>
 
@@ -79,7 +79,7 @@
 
 
 
-				<button type="submit" name="kullanicibilgiguncelle" class="btn btn-default btn-red">Bilgilerimi Güncelle</button>
+				<button type="submit" name="kullanicisifreguncelle" class="btn btn-default btn-red">Şifre Değiştir</button>
 			</div>
 			<div class="col-md-6">
 				<div class="title-bg">
@@ -87,7 +87,7 @@
 				</div>
 
 
-				<center><a href="sifre-guncelle"><img width="400" src="dimg/sifremiunuttum.png"></a></center>
+				<center><a href="sifre-guncelle"><img width="400" src="http://www.emrahyuksel.com.tr/dimg/sifremi-unuttum.jpg"></a></center>
 			</div>
 		</div>
 	</div>
