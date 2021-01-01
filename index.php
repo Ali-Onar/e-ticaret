@@ -29,17 +29,26 @@ include "header.php";
 			));
 			while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
 
+				$urun_id = $uruncek['urun_id'];
+				$urunfotosor = $db->prepare("SELECT * FROM urunfoto where urun_id=:urun_id order by urunfoto_sira ASC limit 1 ");
+				$urunfotosor->execute(array(
+					'urun_id' => $urun_id
+				));
+
+				$urunfotocek = $urunfotosor->fetch(PDO::FETCH_ASSOC);
+
+
 			?>
 				<div class="item">
 					<div class="productwrap">
 						<div class="pr-img">
 							<div class="hot"></div>
-							<a href="urun-<?=seo($uruncek["urun_ad"]).'-'.$uruncek['urun_id'] ?>"><img src="images\sample-1.jpg" alt="" class="img-responsive"></a>
+							<a href="urun-<?= seo($uruncek["urun_ad"]) . '-' . $uruncek['urun_id'] ?>"><img src="<?php echo $urunfotocek['urunfoto_resimyol'] ?>" alt="" class="img-responsive"></a>
 							<div class="pricetag blue">
 								<div class="inner"><span><?php echo $uruncek['urun_fiyat'] ?></span></div>
 							</div>
 						</div>
-						<span class="smalltitle"><a href="urun-<?=seo($uruncek["urun_ad"]).'-'.$uruncek['urun_id'] ?>"><?php echo $uruncek['urun_ad'] ?></a></span>
+						<span class="smalltitle"><a href="urun-<?= seo($uruncek["urun_ad"]) . '-' . $uruncek['urun_id'] ?>"><?php echo $uruncek['urun_ad'] ?></a></span>
 						<span class="smalldesc">Ürün Kodu: <?php echo $uruncek['urun_id'] ?></span>
 					</div>
 				</div>
@@ -75,8 +84,8 @@ include "header.php";
 			</div>
 			<p class="ct">
 
-				<?php 
-				echo substr($hakkimizdacek['hakkimizda_icerik'],0,793); 
+				<?php
+				echo substr($hakkimizdacek['hakkimizda_icerik'], 0, 793);
 				?>
 
 			</p>
