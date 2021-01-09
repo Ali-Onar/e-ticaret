@@ -120,14 +120,19 @@ $kullanicicek = $kullanicisor->fetch(PDO::FETCH_ASSOC);
 								<div class="srchwrap">
 									<div class="row">
 										<div class="col-md-12">
-											<form class="form-horizontal" role="form">
+
+											<form action="arama" method="POST" class="form-horizontal" role="form">
 												<div class="form-group">
-													<label for="search" class="col-sm-2 control-label">Search</label>
+													<!--
+														<label for="search" class="col-sm-2 control-label">Search</label>
+													-->
+													<button name="arama" class="btn btn-default btn-xs">Ara</button>
 													<div class="col-sm-10">
-														<input type="text" class="form-control" id="search">
+														<input type="text" name="aranan" class="form-control" id="search">
 													</div>
 												</div>
 											</form>
+
 										</div>
 									</div>
 								</div>
@@ -216,7 +221,9 @@ $kullanicicek = $kullanicisor->fetch(PDO::FETCH_ASSOC);
 												<td><a href="product.htm"><?php echo $uruncek['urun_ad'] ?></a></td>
 												<td><?php echo $sepetcek['urun_adet'] ?> Adet</td>
 												<td><?php echo $uruncek['urun_fiyat'] ?> TL</td>
-												<td><!--<a href=""><i class="fa fa-times-circle fa-2x"></i></a>--></td>
+												<td>
+													<!--<a href=""><i class="fa fa-times-circle fa-2x"></i></a>-->
+												</td>
 											</tr>
 
 										<?php } ?>

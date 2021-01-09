@@ -373,7 +373,7 @@ if (isset($_POST['apiayarkaydet'])) {
     }
 }
 
-// API AYARLAR GÜNCELLEME
+// SOSYAL AYARLAR GÜNCELLEME
 if (isset($_POST['sosyalayarkaydet'])) {
 
     $ayarkaydet = $db->prepare("UPDATE ayar SET 
@@ -397,7 +397,7 @@ if (isset($_POST['sosyalayarkaydet'])) {
     }
 }
 
-// API AYARLAR GÜNCELLEME
+// MAIL AYARLAR GÜNCELLEME
 if (isset($_POST['mailayarkaydet'])) {
 
     $ayarkaydet = $db->prepare("UPDATE ayar SET 
@@ -1012,3 +1012,4 @@ if(isset($_POST['urunfotosil'])) {
 
 
 } 
+

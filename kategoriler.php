@@ -1,25 +1,5 @@
 <?php include "header.php";
 
-if (isset($_GET['sef'])) {
-
-	$kategorisor = $db->prepare("SELECT * FROM kategori where kategori_seourl=:seourl");
-	$kategorisor->execute(array(
-		'seourl' => $_GET['sef']
-	));
-	$kategoricek = $kategorisor->fetch(PDO::FETCH_ASSOC);
-
-	$kategori_id = $kategoricek['kategori_id'];
-
-	$urunsor = $db->prepare("SELECT * FROM urun where kategori_id=:kategori_id order by urun_id DESC");
-	$urunsor->execute(array(
-		'kategori_id' => $kategori_id
-	));
-
-	$say = $urunsor->rowcount();
-} else {
-	$urunsor = $db->prepare("SELECT * FROM urun order by urun_id DESC");
-	$urunsor->execute();
-}
 
 ?>
 
@@ -41,34 +21,129 @@ if (isset($_GET['sef'])) {
 				</div>
 			</div>
 			<div class="row prdct">
+
+			<?php
+
+			// pagination - sayfalama baş
+
+			$sayfada = 6; // sayfada gösterilecek içerik miktarını belirtiyoruz.
+			$sorgu = $db->prepare("select * from kategori");
+			$sorgu->execute();
+			$toplam_icerik = $sorgu->rowCount();
+			$toplam_sayfa = ceil($toplam_icerik / $sayfada);
+			// eğer sayfa girilmemişse 1 varsayalım.
+			$sayfa = isset($_GET['sayfa']) ? (int) $_GET['sayfa'] : 1;
+			// eğer 1'den küçük bir sayfa sayısı girildiyse 1 yapalım.
+			if ($sayfa < 1) $sayfa = 1;
+			// toplam sayfa sayımızdan fazla yazılırsa en son sayfayı varsayalım.
+			if ($sayfa > $toplam_sayfa) $sayfa = $toplam_sayfa;
+			$limit = ($sayfa - 1) * $sayfada;
+
+			// pagination - sayfalama bit
+			
+			if (isset($_GET['sef'])) {
+			
+				$kategorisor = $db->prepare("SELECT * FROM kategori where kategori_seourl=:seourl");
+				$kategorisor->execute(array(
+					'seourl' => $_GET['sef']
+				));
+				$kategoricek = $kategorisor->fetch(PDO::FETCH_ASSOC);
+			
+				$kategori_id = $kategoricek['kategori_id'];
+			
+				$urunsor = $db->prepare("SELECT * FROM urun where kategori_id=:kategori_id order by urun_id DESC limit $limit,$sayfada");
+				$urunsor->execute(array(
+					'kategori_id' => $kategori_id
+				));
+			
+				$say = $urunsor->rowcount();
+			} else {
+				$urunsor = $db->prepare("SELECT * FROM urun order by urun_id DESC limit $limit,$sayfada");
+				$urunsor->execute();
+			}
+
+			?>
 				<!--Products-->
 
 				<?php
-				if ($say == 0) {
+				if ($toplam_icerik == 0) {
 					echo "İçerik Bulunamadı..";
 				}
 
 				while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
-					
+
 				?>
 
 					<div class="col-md-4">
 						<div class="productwrap">
 							<div class="pr-img">
 								<div class="hot"></div>
-								<a href="urun-<?=seo($uruncek["urun_ad"]).'-'.$uruncek['urun_id'] ?>"><img src="images\sample-3.jpg" alt="" class="img-responsive"></a>
+								<a href="urun-<?= seo($uruncek["urun_ad"]) . '-' . $uruncek['urun_id'] ?>"><img src="
+
+								<?php
+								// ürün foto yolu
+								$urun_id=$uruncek['urun_id'];
+								$urunfotosor=$db->prepare("SELECT * FROM urunfoto where urun_id=:urun_id order by urunfoto_sira ASC limit 1 ");
+								$urunfotosor->execute(array(
+									'urun_id' => $urun_id
+									));
+			
+								$urunfotocek=$urunfotosor->fetch(PDO::FETCH_ASSOC);
+								echo $urunfotocek['urunfoto_resimyol'];
+								?>
+
+								" alt="" class="img-responsive"></a>
 								<div class="pricetag on-sale">
 									<div class="inner on-sale"><span class="onsale">
 											<!--<span class="oldprice"></span> -->
 											<?php echo $uruncek['urun_fiyat'] ?> TL</span></div>
 								</div>
 							</div>
-							<span class="smalltitle"><a href="product.htm"><?php echo $uruncek['urun_ad'] ?></a></span>
+							<span class="smalltitle"><a href="urun-<?=seo($uruncek["urun_ad"]).'-'.$uruncek["urun_id"]?>"><?php echo $uruncek['urun_ad'] ?></a></span>
 							<span class="smalldesc">Ürün Kodu: <?php echo $uruncek['urun_id'] ?></span>
 						</div>
 					</div>
 
 				<?php } ?>
+
+				<div align="right" class="col-md-12">
+                     		<ul class="pagination">
+
+                     			<?php
+
+                     			$s=0;
+
+                     			while ($s < $toplam_sayfa) {
+
+                     				$s++; ?>
+
+                     				<?php 
+
+                     				if ($s==$sayfa) {?>
+
+                     				<li class="active">
+
+                     					<a href="kategoriler?sayfa=<?php echo $s; ?>"><?php echo $s; ?></a>
+
+                     				</li>
+
+                     				<?php } else {?>
+
+
+                     				<li>
+
+                     					<a href="kategoriler?sayfa=<?php echo $s; ?>"><?php echo $s; ?></a>
+
+                     				</li>
+
+                     				<?php   }
+
+                     			}
+
+                     			?>
+
+                     		</ul>
+                     	</div>
 
 
 			</div>
